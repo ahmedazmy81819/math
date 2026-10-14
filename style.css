@@ -1,0 +1,525 @@
+/* =====================================================
+   FINANCIAL HUB — Mobile-First, Rock-Solid Layout
+   ===================================================== */
+
+/* ── Reset ── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Prevent any element from ever causing horizontal scroll */
+    overflow-x: hidden;
+}
+
+/* ── Design Tokens ── */
+:root {
+    --bg:       #0a0a0f;
+    --surface:  #111118;
+    --card:     #14141c;
+    --input-bg: #1a1a24;
+    --border:   rgba(255,255,255,.07);
+    --border-hi:rgba(255,255,255,.13);
+
+    --text-1: #ededf5;
+    --text-2: #8888a0;
+    --text-3: #48485e;
+
+    --blue:   #5b9bff;
+    --green:  #22c55e;
+    --amber:  #f59e0b;
+    --violet: #9b6eff;
+    --cyan:   #06b6d4;
+    --pink:   #f06aab;
+
+    --ok:  #22c55e;
+    --wrn: #f59e0b;
+    --bad: #ef4444;
+
+    /* safe-area for iPhone notch */
+    --safe-top:    env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left:   env(safe-area-inset-left, 0px);
+    --safe-right:  env(safe-area-inset-right, 0px);
+}
+
+/* ── Body ── */
+body {
+    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text-1);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    /* Full-bleed dark bg, no white flash on overscroll */
+    background-attachment: fixed;
+}
+
+.app {
+    width: 100%;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* ── Header / Nav ── */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    background: rgba(10,10,15,.95);
+    border-bottom: 1px solid var(--border);
+    /* Push down under iOS status bar */
+    padding-top: var(--safe-top);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+    .header {
+        background: rgba(10,10,15,.78);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .8rem 1rem;
+    gap: .75rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.logo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blue);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: -.01em;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Desktop nav links — hidden on mobile */
+.nav-links { display: none; }
+
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+        gap: .15rem;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        flex: 1;
+    }
+    .nav-links a {
+        color: var(--text-2);
+        text-decoration: none;
+        font-size: .8rem;
+        font-weight: 500;
+        padding: .32rem .65rem;
+        border-radius: 99px;
+        white-space: nowrap;
+        transition: color .15s, background .15s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+        color: var(--text-1);
+        background: rgba(255,255,255,.07);
+    }
+    .menu-toggle { display: none !important; }
+}
+
+/* ── Hamburger ── */
+.menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-1);
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: background .15s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.menu-toggle:active { background: var(--border-hi); }
+
+/* ── Mobile dropdown ── */
+.mobile-menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: .4rem .75rem calc(.75rem + var(--safe-bottom));
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+    display: flex;
+    align-items: center;
+    color: var(--text-2);
+    text-decoration: none;
+    font-size: .95rem;
+    padding: .85rem .25rem;
+    border-bottom: 1px solid var(--border);
+    min-height: 48px;
+    -webkit-tap-highlight-color: transparent;
+    transition: color .12s;
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:active { color: var(--text-1); }
+
+/* ── Main container ── */
+.main {
+    flex: 1;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.25rem .875rem 3rem;
+    /* keep content off notch edges */
+    padding-left:  calc(.875rem + var(--safe-left));
+    padding-right: calc(.875rem + var(--safe-right));
+}
+@media (min-width: 600px)  { .main { padding: 1.75rem 1.25rem 4rem; } }
+@media (min-width: 1024px) { .main { padding: 2.5rem 2rem 5rem; } }
+
+/* ── Section ── */
+.section { margin-bottom: 2.25rem; }
+@media (min-width: 768px) { .section { margin-bottom: 3.5rem; } }
+
+.section-header {
+    margin-bottom: 1.125rem;
+    padding-bottom: .875rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.section-title {
+    font-size: clamp(1.15rem, 4.5vw, 1.7rem);
+    font-weight: 700;
+    letter-spacing: -.025em;
+    margin-bottom: .2rem;
+    line-height: 1.2;
+}
+.section-desc {
+    font-size: .82rem;
+    color: var(--text-2);
+    line-height: 1.4;
+}
+
+/* Section accent colours */
+.section-liquidity     .section-title { color: var(--blue); }
+.section-solvency      .section-title { color: var(--green); }
+.section-activity      .section-title { color: var(--amber); }
+.section-profitability .section-title { color: var(--violet); }
+.section-cashflow      .section-title { color: var(--cyan); }
+.section-budget        .section-title { color: var(--pink); }
+
+/* ── Card Grid ── */
+.card-grid {
+    display: grid;
+    gap: .875rem;
+    grid-template-columns: 1fr;
+    /* Prevent grid from exceeding viewport */
+    width: 100%;
+}
+@media (min-width: 580px)  { .card-grid { grid-template-columns: repeat(2,1fr); gap: 1.125rem; } }
+@media (min-width: 1024px) { .card-grid { grid-template-columns: repeat(3,1fr); gap: 1.375rem; } }
+
+/* ── Card ── */
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.125rem;
+    display: flex;
+    flex-direction: column;
+    gap: .875rem;
+    /* CRITICAL: allow card to shrink inside its grid cell, never overflow */
+    min-width: 0;
+    width: 100%;
+    /* Clip anything that slips through */
+    overflow: hidden;
+}
+@media (hover: hover) {
+    .card { transition: border-color .18s, transform .18s; }
+    .card:hover {
+        border-color: var(--border-hi);
+        transform: translateY(-1px);
+    }
+}
+
+/* ── Card Header ── */
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: .5rem;
+    /* Wrap when badge + title don't fit in one line */
+    flex-wrap: wrap;
+}
+
+.card-title {
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--text-1);
+    line-height: 1.35;
+    /* Allow title text to shrink and wrap, never push badge off */
+    flex: 1;
+    min-width: 0;
+}
+
+/* ── Badge ── */
+.badge {
+    font-size: .64rem;
+    font-weight: 700;
+    padding: .18rem .55rem;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1.6;
+}
+[data-badge="Liquidity"]     { color:#5b9bff; background:rgba(91,155,255,.12); }
+[data-badge="Solvency"]      { color:#22c55e; background:rgba(34,197,94,.12); }
+[data-badge="Activity"]      { color:#f59e0b; background:rgba(245,158,11,.12); }
+[data-badge="Profitability"] { color:#9b6eff; background:rgba(155,110,255,.12); }
+[data-badge="Cash Flow"]     { color:#06b6d4; background:rgba(6,182,212,.12); }
+[data-badge="Budget"]        { color:#f06aab; background:rgba(240,106,171,.12); }
+
+/* ── Formula Box ── */
+/*
+ * This is the key mobile fix.
+ * The .formula div itself is scrollable.
+ * MathJax injects mjx-container — we must let it size itself,
+ * then let the parent scroll. We achieve this by setting the
+ * container to display:block and letting overflow-x:auto work.
+ *
+ * DO NOT set max-width or width on mjx-container — that clips math.
+ * Instead make .formula a scroll container.
+ */
+.formula {
+    position: relative;
+    width: 100%;
+    /* Scroll horizontally if formula is wide */
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    background: rgba(0,0,0,.3);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: .875rem .625rem;
+    text-align: center;
+    /* Prevent formula from ever pushing the card wider */
+    min-width: 0;
+}
+
+/* MathJax display-mode container: let it be as wide as it needs,
+   parent .formula will scroll */
+.formula mjx-container[display="true"] {
+    display: block !important;
+    margin: 0 auto !important;
+    /* overflow is handled by the parent — don't clip here */
+    overflow: visible !important;
+}
+
+/* Inline math (inside paragraphs) stays in flow */
+mjx-container:not([display="true"]) {
+    display: inline !important;
+    vertical-align: middle;
+}
+
+.desc {
+    font-size: .82rem;
+    color: var(--text-2);
+    line-height: 1.6;
+}
+
+/* ── Form Groups ── */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+.form-group label {
+    font-size: .78rem;
+    font-weight: 500;
+    color: var(--text-2);
+    /* Truncate very long labels on tiny screens */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* iOS input zoom fix: font-size must be >= 16px */
+.form-group input[type="number"] {
+    font-size: 16px;
+    width: 100%;
+    min-width: 0;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: .6rem .875rem;
+    color: var(--text-1);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    -moz-appearance: textfield;
+    transition: border-color .15s, box-shadow .15s;
+    /* Prevent input from stretching card */
+    max-width: 100%;
+}
+/* Hide native number spinners */
+.form-group input[type="number"]::-webkit-inner-spin-button,
+.form-group input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+.form-group input::placeholder { color: var(--text-3); font-size: 13px; }
+.form-group input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(91,155,255,.14);
+}
+
+/* ── Calculate Button ── */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    padding: .75rem 1.25rem;
+    border: none;
+    border-radius: 7px;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    /* iOS minimum tap target */
+    min-height: 44px;
+    transition: filter .15s, transform .1s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover  { filter: brightness(1.1); }
+.btn-primary:active { filter: brightness(.88); transform: scale(.98); }
+
+/* ── Result Panel ── */
+.result {
+    display: none;
+    flex-direction: column;
+    gap: .5rem;
+    animation: slideUp .2s ease;
+}
+.result.visible { display: flex; }
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.result-box {
+    display: flex;
+    align-items: center;
+    gap: .625rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--ok);
+    border-radius: 7px;
+    padding: .75rem .875rem;
+    min-width: 0;
+    overflow: hidden;
+}
+.result-box.warn { border-left-color: var(--wrn); }
+.result-box.bad  { border-left-color: var(--bad); }
+
+.result-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--ok);
+    flex-shrink: 0;
+}
+.result-box.warn .result-dot { background: var(--wrn); }
+.result-box.bad  .result-dot { background: var(--bad); }
+
+.result-meta {
+    display: flex;
+    flex-direction: column;
+    gap: .08rem;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.result-num {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ok);
+    letter-spacing: -.025em;
+    line-height: 1.2;
+    /* Long dollar values wrap instead of overflowing */
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+.result-box.warn .result-num { color: var(--wrn); }
+.result-box.bad  .result-num { color: var(--bad); }
+
+.result-label {
+    font-size: .72rem;
+    color: var(--text-2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.result-note {
+    font-size: .8rem;
+    color: var(--text-2);
+    background: rgba(255,255,255,.025);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: .6rem .875rem;
+    line-height: 1.55;
+    /* Long notes wrap properly */
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* ── Footer ── */
+.footer {
+    text-align: center;
+    border-top: 1px solid var(--border);
+    padding: 1.125rem 1rem calc(1.125rem + var(--safe-bottom));
+    background: var(--surface);
+}
+.footer p { color: var(--text-3); font-size: .78rem; }
+
+/* ── Scrollbar (desktop hover devices only) ── */
+@media (hover: hover) {
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 4px; }
+}
+
+::selection { background: rgba(91,155,255,.22); }
+
+/* ── Accessibility: reduce motion ── */
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+}
