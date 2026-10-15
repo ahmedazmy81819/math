@@ -1,382 +1,329 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0a0a0f">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Financial Hub</title>
+    <meta name="theme-color" content="#070a12">
+    <title>Quantum Financial Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script>
-        // MathJax config — MUST appear before the MathJax script loads
         window.MathJax = {
-            tex: {
-                inlineMath: [['$','$']],
-                displayMath: [['$$','$$']]
-            },
-            options: {
-                skipHtmlTags: ['script','noscript','style','textarea','pre']
-            },
-            chtml: {
-                // Responsive scale: shrink formulas on narrow screens
-                scale: window.innerWidth < 480 ? 0.78 : window.innerWidth < 768 ? 0.88 : 1,
-                minScale: 0.5,
-                mtextInheritFont: true,
-                // Adaptive line-width keeps wide fractions from overflowing
-                linebreaks: { automatic: true, width: 'container' }
-            },
-            startup: {
-                typeset: true,
-                ready() {
-                    MathJax.startup.defaultReady();
-                    MathJax.startup.promise.then(() => {
-                        // After typeset: make every display container scrollable-friendly
-                        document.querySelectorAll('mjx-container[display="true"]').forEach(c => {
-                            c.style.overflowX = 'auto';
-                            c.style.maxWidth  = '100%';
-                        });
-                    });
-                }
-            }
+            tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+            options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] },
+            chtml: { scale: window.innerWidth < 480 ? 0.78 : window.innerWidth < 768 ? 0.88 : 1, minScale: 0.5, mtextInheritFont: true, linebreaks: { automatic: true, width: 'container' } },
+            startup: { typeset: true, ready() { MathJax.startup.defaultReady(); } }
         };
     </script>
-    <script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
-        crossorigin="anonymous">
-    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" crossorigin="anonymous"></script>
 </head>
 <body>
+<div class="app-glow"></div>
 <div class="app">
 
-    <!-- ── Header ── -->
-    <header class="header">
-        <nav class="nav">
-            <a href="#" class="logo">📊 Financial Hub</a>
-            <div class="nav-links">
-                <a href="#liquidity">Liquidity</a>
-                <a href="#solvency">Solvency</a>
-                <a href="#activity">Activity</a>
-                <a href="#profitability">Profitability</a>
-                <a href="#cashflow">Cash Flow</a>
-                <a href="#budget">Budget</a>
-            </div>
-            <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
-        </nav>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#liquidity"     onclick="closeMenu()">Liquidity</a>
-            <a href="#solvency"      onclick="closeMenu()">Solvency</a>
-            <a href="#activity"      onclick="closeMenu()">Activity</a>
-            <a href="#profitability" onclick="closeMenu()">Profitability</a>
-            <a href="#cashflow"      onclick="closeMenu()">Cash Flow</a>
-            <a href="#budget"        onclick="closeMenu()">Budget</a>
-        </div>
-    </header>
 
-    <!-- ── Main ── -->
-    <main class="main">
+<!-- HEADER -->
+<header class="header">
+  <nav class="nav">
+    <a href="#" class="logo">
+      <span class="logo-icon">&#9889;</span>
+      <span class="logo-text">Quantum<span class="logo-highlight">Finance</span></span>
+    </a>
+    <div class="search-bar-wrapper">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="globalSearch" placeholder="Search ratios... (e.g. ROE, FCF)" aria-label="Search">
+      <kbd class="search-shortcut">&#8984;K</kbd>
+    </div>
+    <div class="nav-links">
+      <a href="#liquidity" class="nav-link active">Liquidity</a>
+      <a href="#solvency" class="nav-link">Solvency</a>
+      <a href="#activity" class="nav-link">Activity</a>
+      <a href="#profitability" class="nav-link">Profitability</a>
+      <a href="#cashflow" class="nav-link">Cash Flow</a>
+      <a href="#budget" class="nav-link">Budget</a>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-search"><input type="text" id="mobileSearchInput" placeholder="Search metrics..."></div>
+    <a href="#liquidity" onclick="closeMenu()">&#128167; Liquidity</a>
+    <a href="#solvency" onclick="closeMenu()">&#128737; Solvency</a>
+    <a href="#activity" onclick="closeMenu()">&#9889; Activity</a>
+    <a href="#profitability" onclick="closeMenu()">&#128200; Profitability</a>
+    <a href="#cashflow" onclick="closeMenu()">&#128181; Cash Flow</a>
+    <a href="#budget" onclick="closeMenu()">&#127919; Budget</a>
+  </div>
+</header>
 
-        <!-- 1. Liquidity -->
-        <section id="liquidity" class="section section-liquidity">
-            <div class="section-header">
-                <h2 class="section-title">Liquidity Ratios</h2>
-                <p class="section-desc">How well can the company meet short-term obligations?</p>
-            </div>
-            <div class="card-grid">
+<main class="main">
 
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Current Ratio</h3>
-                        <span class="badge" data-badge="Liquidity">Liquidity</span>
-                    </div>
-                    <div class="formula">$$CR = \dfrac{Current\ Assets}{Current\ Liabilities}$$</div>
-                    <p class="desc">Core liquidity test. Ratio ≥ 2.0 = healthy buffer. Below 1.0 = risk.</p>
-                    <div class="form-group"><label>Current Assets ($)</label><input type="number" id="cr-assets" inputmode="decimal" placeholder="150 000"></div>
-                    <div class="form-group"><label>Current Liabilities ($)</label><input type="number" id="cr-liabilities" inputmode="decimal" placeholder="75 000"></div>
-                    <button class="btn btn-primary" onclick="calc('cr')">Calculate</button>
-                    <div class="result" id="cr-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Quick Ratio (Acid Test)</h3>
-                        <span class="badge" data-badge="Liquidity">Liquidity</span>
-                    </div>
-                    <div class="formula">$$QR = \dfrac{Current\ Assets - Inventory}{Current\ Liabilities}$$</div>
-                    <p class="desc">Stricter: excludes inventory. Target ≥ 1.0.</p>
-                    <div class="form-group"><label>Current Assets ($)</label><input type="number" id="qr-assets" inputmode="decimal" placeholder="150 000"></div>
-                    <div class="form-group"><label>Inventory ($)</label><input type="number" id="qr-inventory" inputmode="decimal" placeholder="40 000"></div>
-                    <div class="form-group"><label>Current Liabilities ($)</label><input type="number" id="qr-liabilities" inputmode="decimal" placeholder="75 000"></div>
-                    <button class="btn btn-primary" onclick="calc('qr')">Calculate</button>
-                    <div class="result" id="qr-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Cash Ratio</h3>
-                        <span class="badge" data-badge="Liquidity">Liquidity</span>
-                    </div>
-                    <div class="formula">$$Cash\ Ratio = \dfrac{Cash + Equivalents}{Current\ Liabilities}$$</div>
-                    <p class="desc">Most conservative. Only counts cash. Target ≥ 0.5.</p>
-                    <div class="form-group"><label>Cash + Equivalents ($)</label><input type="number" id="cash-amount" inputmode="decimal" placeholder="50 000"></div>
-                    <div class="form-group"><label>Current Liabilities ($)</label><input type="number" id="cash-liabilities" inputmode="decimal" placeholder="75 000"></div>
-                    <button class="btn btn-primary" onclick="calc('cash')">Calculate</button>
-                    <div class="result" id="cash-result"></div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- 2. Solvency -->
-        <section id="solvency" class="section section-solvency">
-            <div class="section-header">
-                <h2 class="section-title">Solvency Ratios</h2>
-                <p class="section-desc">Long-term financial stability and debt coverage</p>
-            </div>
-            <div class="card-grid">
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Debt-to-Asset Ratio</h3>
-                        <span class="badge" data-badge="Solvency">Solvency</span>
-                    </div>
-                    <div class="formula">$$D/A = \dfrac{Total\ Liabilities}{Total\ Assets} \times 100$$</div>
-                    <p class="desc">% of assets financed by debt. Target ≤ 40%.</p>
-                    <div class="form-group"><label>Total Liabilities ($)</label><input type="number" id="dta-liabilities" inputmode="decimal"></div>
-                    <div class="form-group"><label>Total Assets ($)</label><input type="number" id="dta-assets" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('dta')">Calculate</button>
-                    <div class="result" id="dta-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Times Interest Earned</h3>
-                        <span class="badge" data-badge="Solvency">Solvency</span>
-                    </div>
-                    <div class="formula">$$TIE = \dfrac{EBIT}{Interest\ Expense}$$</div>
-                    <p class="desc">Operating profit vs. interest cost. Target ≥ 3.0×.</p>
-                    <div class="form-group"><label>EBIT ($)</label><input type="number" id="tie-ebit" inputmode="decimal"></div>
-                    <div class="form-group"><label>Interest Expense ($)</label><input type="number" id="tie-interest" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('tie')">Calculate</button>
-                    <div class="result" id="tie-result"></div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- 3. Activity -->
-        <section id="activity" class="section section-activity">
-            <div class="section-header">
-                <h2 class="section-title">Activity / Efficiency Ratios</h2>
-                <p class="section-desc">How effectively are assets being used?</p>
-            </div>
-            <div class="card-grid">
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Inventory Turnover</h3>
-                        <span class="badge" data-badge="Activity">Activity</span>
-                    </div>
-                    <div class="formula">$$IT = \dfrac{COGS}{Average\ Inventory}$$</div>
-                    <p class="desc">Times inventory is sold per year. Higher = leaner ops.</p>
-                    <div class="form-group"><label>COGS ($)</label><input type="number" id="inv-cogs" inputmode="decimal"></div>
-                    <div class="form-group"><label>Average Inventory ($)</label><input type="number" id="inv-avg" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('inv')">Calculate</button>
-                    <div class="result" id="inv-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Receivables Turnover</h3>
-                        <span class="badge" data-badge="Activity">Activity</span>
-                    </div>
-                    <div class="formula">$$ART = \dfrac{Net\ Credit\ Sales}{Average\ Receivables}$$</div>
-                    <p class="desc">Collection speed. Days Outstanding = 365 ÷ ART.</p>
-                    <div class="form-group"><label>Net Credit Sales ($)</label><input type="number" id="ar-sales" inputmode="decimal"></div>
-                    <div class="form-group"><label>Average Receivables ($)</label><input type="number" id="ar-avg" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('ar')">Calculate</button>
-                    <div class="result" id="ar-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Asset Turnover</h3>
-                        <span class="badge" data-badge="Activity">Activity</span>
-                    </div>
-                    <div class="formula">$$AT = \dfrac{Net\ Sales}{Average\ Total\ Assets}$$</div>
-                    <p class="desc">Revenue per dollar of assets. Higher = more efficient.</p>
-                    <div class="form-group"><label>Net Sales ($)</label><input type="number" id="at-sales" inputmode="decimal"></div>
-                    <div class="form-group"><label>Average Total Assets ($)</label><input type="number" id="at-assets" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('at')">Calculate</button>
-                    <div class="result" id="at-result"></div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- 4. Profitability -->
-        <section id="profitability" class="section section-profitability">
-            <div class="section-header">
-                <h2 class="section-title">Profitability Ratios</h2>
-                <p class="section-desc">Is the company generating adequate returns?</p>
-            </div>
-            <div class="card-grid">
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Net Profit Margin</h3>
-                        <span class="badge" data-badge="Profitability">Profitability</span>
-                    </div>
-                    <div class="formula">$$NPM = \dfrac{Net\ Income}{Net\ Sales} \times 100$$</div>
-                    <p class="desc">Cents kept per dollar of revenue. Sector-dependent.</p>
-                    <div class="form-group"><label>Net Income ($)</label><input type="number" id="pm-income" inputmode="decimal"></div>
-                    <div class="form-group"><label>Net Sales ($)</label><input type="number" id="pm-sales" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('pm')">Calculate</button>
-                    <div class="result" id="pm-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Return on Assets (ROA)</h3>
-                        <span class="badge" data-badge="Profitability">Profitability</span>
-                    </div>
-                    <div class="formula">$$ROA = \dfrac{Net\ Income}{Avg.\ Total\ Assets} \times 100$$</div>
-                    <p class="desc">Profit extracted from every asset dollar. Target ≥ 5%.</p>
-                    <div class="form-group"><label>Net Income ($)</label><input type="number" id="roa-income" inputmode="decimal"></div>
-                    <div class="form-group"><label>Average Total Assets ($)</label><input type="number" id="roa-assets" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('roa')">Calculate</button>
-                    <div class="result" id="roa-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Return on Equity (ROE)</h3>
-                        <span class="badge" data-badge="Profitability">Profitability</span>
-                    </div>
-                    <div class="formula">$$ROE = \dfrac{Net\ Income}{Avg.\ Equity} \times 100$$</div>
-                    <p class="desc">Shareholder return. Target ≥ 15% for most industries.</p>
-                    <div class="form-group"><label>Net Income ($)</label><input type="number" id="roe-income" inputmode="decimal"></div>
-                    <div class="form-group"><label>Average Equity ($)</label><input type="number" id="roe-equity" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('roe')">Calculate</button>
-                    <div class="result" id="roe-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Earnings Per Share (EPS)</h3>
-                        <span class="badge" data-badge="Profitability">Profitability</span>
-                    </div>
-                    <div class="formula">$$EPS = \dfrac{Net\ Income - Preferred\ Div.}{Weighted\ Avg.\ Shares}$$</div>
-                    <p class="desc">Profit attributable to each common share. Higher = better.</p>
-                    <div class="form-group"><label>Net Income ($)</label><input type="number" id="eps-income" inputmode="decimal"></div>
-                    <div class="form-group"><label>Preferred Dividends ($)</label><input type="number" id="eps-pref" inputmode="decimal" value="0"></div>
-                    <div class="form-group"><label>Weighted Avg. Common Shares</label><input type="number" id="eps-shares" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('eps')">Calculate</button>
-                    <div class="result" id="eps-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Price-to-Earnings (P/E)</h3>
-                        <span class="badge" data-badge="Profitability">Profitability</span>
-                    </div>
-                    <div class="formula">$$P/E = \dfrac{Market\ Price\ Per\ Share}{EPS}$$</div>
-                    <p class="desc">Market premium over earnings. Lower can mean undervalued.</p>
-                    <div class="form-group"><label>Market Price / Share ($)</label><input type="number" id="pe-price" inputmode="decimal"></div>
-                    <div class="form-group"><label>EPS ($)</label><input type="number" id="pe-eps" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('pe')">Calculate</button>
-                    <div class="result" id="pe-result"></div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- 5. Cash Flow -->
-        <section id="cashflow" class="section section-cashflow">
-            <div class="section-header">
-                <h2 class="section-title">Cash Flow Analysis</h2>
-                <p class="section-desc">Actual cash generated and available to the business</p>
-            </div>
-            <div class="card-grid">
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">NOPAT</h3>
-                        <span class="badge" data-badge="Cash Flow">Cash Flow</span>
-                    </div>
-                    <div class="formula">$$NOPAT = EBIT \times (1 - T)$$</div>
-                    <p class="desc">Net Operating Profit After Tax — baseline for OCF.</p>
-                    <div class="form-group"><label>EBIT ($)</label><input type="number" id="nopat-ebit" inputmode="decimal"></div>
-                    <div class="form-group"><label>Tax Rate (%)</label><input type="number" id="nopat-tax" inputmode="decimal" placeholder="20"></div>
-                    <button class="btn btn-primary" onclick="calc('nopat')">Calculate</button>
-                    <div class="result" id="nopat-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Operating Cash Flow (OCF)</h3>
-                        <span class="badge" data-badge="Cash Flow">Cash Flow</span>
-                    </div>
-                    <div class="formula">$$OCF = EBIT \times (1-T) + Depreciation$$</div>
-                    <p class="desc">Cash from core operations. Positive = healthy engine.</p>
-                    <div class="form-group"><label>EBIT ($)</label><input type="number" id="ocf-ebit" inputmode="decimal"></div>
-                    <div class="form-group"><label>Tax Rate (%)</label><input type="number" id="ocf-tax" inputmode="decimal" placeholder="20"></div>
-                    <div class="form-group"><label>Depreciation ($)</label><input type="number" id="ocf-depr" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('ocf')">Calculate</button>
-                    <div class="result" id="ocf-result"></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Free Cash Flow (FCF)</h3>
-                        <span class="badge" data-badge="Cash Flow">Cash Flow</span>
-                    </div>
-                    <div class="formula">$$FCF = OCF - NFAI - NCAI$$</div>
-                    <p class="desc">Cash left after CapEx and working capital needs.</p>
-                    <div class="form-group"><label>OCF ($)</label><input type="number" id="fcf-ocf" inputmode="decimal"></div>
-                    <div class="form-group"><label>Net Fixed Asset Investment ($)</label><input type="number" id="fcf-nfai" inputmode="decimal"></div>
-                    <div class="form-group"><label>Net Current Asset Investment ($)</label><input type="number" id="fcf-ncai" inputmode="decimal"></div>
-                    <button class="btn btn-primary" onclick="calc('fcf')">Calculate</button>
-                    <div class="result" id="fcf-result"></div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- 6. Budget -->
-        <section id="budget" class="section section-budget">
-            <div class="section-header">
-                <h2 class="section-title">Cash Budget</h2>
-                <p class="section-desc">Plan cash inflows, outflows, and net position</p>
-            </div>
-            <div class="card-grid">
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Cash Position</h3>
-                        <span class="badge" data-badge="Budget">Budget</span>
-                    </div>
-                    <div class="formula">$$Ending = Beginning + Receipts - Disbursements$$</div>
-                    <p class="desc">Positive ending balance = surplus. Negative = shortage requiring financing.</p>
-                    <div class="form-group"><label>Beginning Balance ($)</label><input type="number" id="cb-begin" inputmode="decimal"></div>
-                    <div class="form-group"><label>Cash Receipts ($)</label><input type="number" id="cb-receipts" inputmode="decimal"></div>
-                    <div class="form-group"><label>Cash Disbursements ($)</label><input type="number" id="cb-disbursements" inputmode="decimal"></div>
-                    <div class="form-group"><label>Min. Required Balance ($)</label><input type="number" id="cb-min" inputmode="decimal" value="0"></div>
-                    <button class="btn btn-primary" onclick="calc('cb')">Calculate</button>
-                    <div class="result" id="cb-result"></div>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="footer">
-        <p>&copy; 2026 Financial Hub — Corporate Finance Reference</p>
-    </footer>
-
+<!-- HERO -->
+<section class="hero-banner">
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span> Professional Financial Engine v3.0</div>
+    <h1 class="hero-title">Financial Intelligence <span class="gradient-text">Without Limits</span></h1>
+    <p class="hero-subtitle">Calculate and benchmark liquidity, solvency, efficiency, and profitability with mathematical rigor and real-time health scoring.</p>
+    <div class="hero-stats"><div class="stat-item"><span class="stat-value">18+</span><span class="stat-label">Core Models</span></div><div class="stat-divider"></div><div class="stat-item"><span class="stat-value">LaTeX</span><span class="stat-label">Exact Formulas</span></div><div class="stat-divider"></div><div class="stat-item"><span class="stat-value">Instant</span><span class="stat-label">Health Score</span></div></div>
+  </div>
+  <div class="quick-portfolio-card">
+    <div class="qp-header"><h3>Portfolio Health Dashboard</h3><span class="badge-live">Live</span></div>
+    <p class="qp-desc">Enter core financials to compute enterprise health index.</p>
+    <div class="qp-grid">
+      <div class="form-group"><label>Current Assets ($)</label><input type="number" id="port-ca" placeholder="1500000" oninput="updatePortfolio()"></div>
+      <div class="form-group"><label>Current Liabilities ($)</label><input type="number" id="port-cl" placeholder="900000" oninput="updatePortfolio()"></div>
+      <div class="form-group"><label>Net Income ($)</label><input type="number" id="port-ni" placeholder="450000" oninput="updatePortfolio()"></div>
+      <div class="form-group"><label>Total Equity ($)</label><input type="number" id="port-eq" placeholder="2000000" oninput="updatePortfolio()"></div>
+    </div>
+    <div class="qp-summary"><div class="qp-score-circle"><svg viewBox="0 0 36 36" class="circular-chart"><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path class="circle" id="portCircle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><text x="18" y="20.35" class="percentage" id="portScoreText">--</text></svg></div><div class="qp-details"><span class="qp-rating" id="portRating">Awaiting Inputs</span><span class="qp-subtext" id="portSubtext">Fill parameters above to generate composite health rating.</span></div></div>
+  </div>
+</section>
+<!-- CATEGORY FILTERS -->
+<div class="category-filters">
+  <button class="filter-btn active" data-filter="all">All Ratios</button>
+  <button class="filter-btn" data-filter="liquidity">&#128167; Liquidity</button>
+  <button class="filter-btn" data-filter="solvency">&#128737; Solvency</button>
+  <button class="filter-btn" data-filter="activity">&#9889; Activity</button>
+  <button class="filter-btn" data-filter="profitability">&#128200; Profitability</button>
+  <button class="filter-btn" data-filter="cashflow">&#128181; Cash Flow</button>
+  <button class="filter-btn" data-filter="budget">&#127919; Budget</button>
 </div>
+
+
+
+<!-- 1. LIQUIDITY -->
+<section id="liquidity" class="section" data-category="liquidity">
+  <div class="section-header">
+    <div class="section-badge liquidity-badge">&#128167; Liquidity</div>
+    <h2 class="section-title">Short-Term Liquidity &amp; Working Capital</h2>
+    <p class="section-desc">Assess the firm's ability to cover short-term obligations without relying on external financing.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card" data-ratio="current ratio liquidity">
+      <div class="card-header"><h3 class="card-title">Current Ratio</h3><span class="badge" data-badge="Liquidity">Liquidity</span></div>
+      <div class="formula">$$CR = \dfrac{Current\ Assets}{Current\ Liabilities}$$</div>
+      <p class="desc">Short-term debt coverage. Target $\ge 1.5\times$ to $2.0\times$.</p>
+      <div class="form-group"><label>Current Assets ($)</label><input type="number" id="cr-assets" placeholder="e.g. 1500000" inputmode="decimal"></div>
+      <div class="form-group"><label>Current Liabilities ($)</label><input type="number" id="cr-liabilities" placeholder="e.g. 900000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('cr')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('cr')">Sample</button>
+      </div>
+      <div class="result" id="cr-result"></div>
+    </div>
+    <div class="card" data-ratio="quick ratio acid test liquidity">
+      <div class="card-header"><h3 class="card-title">Quick Ratio (Acid-Test)</h3><span class="badge" data-badge="Liquidity">Liquidity</span></div>
+      <div class="formula">$$QR = \dfrac{Cash + Sec. + Receivables}{Current\ Liabilities}$$</div>
+      <p class="desc">Stricter test excluding inventory. Target $\ge 1.0\times$.</p>
+      <div class="form-group"><label>Cash &amp; Equivalents ($)</label><input type="number" id="qr-cash" placeholder="e.g. 400000" inputmode="decimal"></div>
+      <div class="form-group"><label>Marketable Securities ($)</label><input type="number" id="qr-sec" placeholder="e.g. 150000" inputmode="decimal"></div>
+      <div class="form-group"><label>Accounts Receivable ($)</label><input type="number" id="qr-ar" placeholder="e.g. 450000" inputmode="decimal"></div>
+      <div class="form-group"><label>Current Liabilities ($)</label><input type="number" id="qr-liabilities" placeholder="e.g. 700000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('qr')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('qr')">Sample</button>
+      </div>
+      <div class="result" id="qr-result"></div>
+    </div>
+    <div class="card" data-ratio="cash ratio liquidity">
+      <div class="card-header"><h3 class="card-title">Cash Ratio</h3><span class="badge" data-badge="Liquidity">Liquidity</span></div>
+      <div class="formula">$$Cash\ Ratio = \dfrac{Cash\ \&\ Equiv.}{Current\ Liabilities}$$</div>
+      <p class="desc">Most conservative liquidity metric. Target $\ge 0.2\times$.</p>
+      <div class="form-group"><label>Cash &amp; Cash Equivalents ($)</label><input type="number" id="cash-amount" placeholder="e.g. 350000" inputmode="decimal"></div>
+      <div class="form-group"><label>Current Liabilities ($)</label><input type="number" id="cash-liabilities" placeholder="e.g. 1000000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('cash')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('cash')">Sample</button>
+      </div>
+      <div class="result" id="cash-result"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 2. SOLVENCY -->
+<section id="solvency" class="section" data-category="solvency">
+  <div class="section-header">
+    <div class="section-badge solvency-badge">&#128737; Solvency</div>
+    <h2 class="section-title">Long-Term Solvency &amp; Financial Leverage</h2>
+    <p class="section-desc">Evaluate long-term debt structure, capital stability, and interest coverage capability.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card" data-ratio="debt to asset leverage solvency">
+      <div class="card-header"><h3 class="card-title">Debt-to-Asset Ratio</h3><span class="badge" data-badge="Solvency">Solvency</span></div>
+      <div class="formula">$$D/A = \dfrac{Total\ Liabilities}{Total\ Assets} \times 100\%$$</div>
+      <p class="desc">Assets financed by creditors. Target $\le 40\%$.</p>
+      <div class="form-group"><label>Total Liabilities ($)</label><input type="number" id="dta-liabilities" placeholder="e.g. 2400000" inputmode="decimal"></div>
+      <div class="form-group"><label>Total Assets ($)</label><input type="number" id="dta-assets" placeholder="e.g. 6000000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('dta')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('dta')">Sample</button>
+      </div>
+      <div class="result" id="dta-result"></div>
+    </div>
+    <div class="card" data-ratio="times interest earned tie coverage solvency">
+      <div class="card-header"><h3 class="card-title">Times Interest Earned (TIE)</h3><span class="badge" data-badge="Solvency">Solvency</span></div>
+      <div class="formula">$$TIE = \dfrac{EBIT}{Interest\ Expense}$$</div>
+      <p class="desc">Operating profit vs. interest cost. Target $\ge 3.0\times$.</p>
+      <div class="form-group"><label>EBIT ($)</label><input type="number" id="tie-ebit" placeholder="e.g. 1200000" inputmode="decimal"></div>
+      <div class="form-group"><label>Interest Expense ($)</label><input type="number" id="tie-interest" placeholder="e.g. 300000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('tie')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('tie')">Sample</button>
+      </div>
+      <div class="result" id="tie-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. ACTIVITY -->
+<section id="activity" class="section" data-category="activity">
+  <div class="section-header">
+    <div class="section-badge activity-badge">&#9889; Activity</div>
+    <h2 class="section-title">Operational Efficiency &amp; Asset Turnover</h2>
+    <p class="section-desc">Measure how effectively assets and working capital are deployed to generate revenue.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card" data-ratio="inventory turnover activity">
+      <div class="card-header"><h3 class="card-title">Inventory Turnover</h3><span class="badge" data-badge="Activity">Activity</span></div>
+      <div class="formula">$$IT = \dfrac{COGS}{Average\ Inventory}$$</div>
+      <p class="desc">How rapidly inventory is sold and replaced per year.</p>
+      <div class="form-group"><label>COGS ($)</label><input type="number" id="inv-cogs" placeholder="e.g. 3000000" inputmode="decimal"></div>
+      <div class="form-group"><label>Average Inventory ($)</label><input type="number" id="inv-avg" placeholder="e.g. 500000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('inv')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('inv')">Sample</button>
+      </div>
+      <div class="result" id="inv-result"></div>
+    </div>
+    <div class="card" data-ratio="receivables turnover collection activity">
+      <div class="card-header"><h3 class="card-title">Receivables Turnover</h3><span class="badge" data-badge="Activity">Activity</span></div>
+      <div class="formula">$$ART = \dfrac{Net\ Credit\ Sales}{Average\ Receivables}$$</div>
+      <p class="desc">Credit collection speed. Days outstanding $= 365 \div ART$.</p>
+      <div class="form-group"><label>Net Credit Sales ($)</label><input type="number" id="ar-sales" placeholder="e.g. 5000000" inputmode="decimal"></div>
+      <div class="form-group"><label>Average Receivables ($)</label><input type="number" id="ar-avg" placeholder="e.g. 625000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('ar')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('ar')">Sample</button>
+      </div>
+      <div class="result" id="ar-result"></div>
+    </div>
+    <div class="card" data-ratio="total asset turnover activity">
+      <div class="card-header"><h3 class="card-title">Total Asset Turnover</h3><span class="badge" data-badge="Activity">Activity</span></div>
+      <div class="formula">$$TAT = \dfrac{Net\ Sales}{Total\ Assets}$$</div>
+      <p class="desc">Sales generated per dollar of total assets owned.</p>
+      <div class="form-group"><label>Net Sales ($)</label><input type="number" id="at-sales" placeholder="e.g. 8000000" inputmode="decimal"></div>
+      <div class="form-group"><label>Total Assets ($)</label><input type="number" id="at-assets" placeholder="e.g. 4000000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('at')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('at')">Sample</button>
+      </div>
+      <div class="result" id="at-result"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 4. PROFITABILITY -->
+<section id="profitability" class="section" data-category="profitability">
+  <div class="section-header">
+    <div class="section-badge profitability-badge">&#128200; Profitability</div>
+    <h2 class="section-title">Earnings Performance &amp; Return Metrics</h2>
+    <p class="section-desc">Examine management's efficiency in generating returns for shareholders and stakeholders.</p>
+  </div>
+  <div class="card-grid">
+    <div class="card" data-ratio="net profit margin profitability">
+      <div class="card-header"><h3 class="card-title">Net Profit Margin</h3><span class="badge" data-badge="Profitability">Profitability</span></div>
+      <div class="formula">$$NPM = \dfrac{Net\ Income}{Net\ Sales} \times 100\%$$</div>
+      <p class="desc">Percentage of revenue remaining after all expenses.</p>
+      <div class="form-group"><label>Net Income ($)</label><input type="number" id="pm-income" placeholder="e.g. 960000" inputmode="decimal"></div>
+      <div class="form-group"><label>Net Sales ($)</label><input type="number" id="pm-sales" placeholder="e.g. 8000000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('pm')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('pm')">Sample</button>
+      </div>
+      <div class="result" id="pm-result"></div>
+    </div>
+    <div class="card" data-ratio="return on assets roa profitability">
+      <div class="card-header"><h3 class="card-title">Return on Assets (ROA)</h3><span class="badge" data-badge="Profitability">Profitability</span></div>
+      <div class="formula">$$ROA = \dfrac{Net\ Income}{Total\ Assets} \times 100\%$$</div>
+      <p class="desc">Profit earned per dollar of total assets. Target $\ge 5\%$.</p>
+      <div class="form-group"><label>Net Income ($)</label><input type="number" id="roa-income" placeholder="e.g. 960000" inputmode="decimal"></div>
+      <div class="form-group"><label>Total Assets ($)</label><input type="number" id="roa-assets" placeholder="e.g. 6000000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('roa')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('roa')">Sample</button>
+      </div>
+      <div class="result" id="roa-result"></div>
+    </div>
+    <div class="card" data-ratio="return on equity roe profitability">
+      <div class="card-header"><h3 class="card-title">Return on Equity (ROE)</h3><span class="badge" data-badge="Profitability">Profitability</span></div>
+      <div class="formula">$$ROE = \dfrac{Net\ Income}{Shareholders'\ Equity} \times 100\%$$</div>
+      <p class="desc">Return on equity capital. Target $\ge 15\%$.</p>
+      <div class="form-group"><label>Net Income ($)</label><input type="number" id="roe-income" placeholder="e.g. 960000" inputmode="decimal"></div>
+      <div class="form-group"><label>Shareholders' Equity ($)</label><input type="number" id="roe-equity" placeholder="e.g. 3600000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('roe')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('roe')">Sample</button>
+      </div>
+      <div class="result" id="roe-result"></div>
+    </div>
+    <div class="card" data-ratio="earnings per share eps profitability">
+      <div class="card-header"><h3 class="card-title">Earnings Per Share (EPS)</h3><span class="badge" data-badge="Profitability">Profitability</span></div>
+      <div class="formula">$$EPS = \dfrac{Net\ Income - Preferred\ Div.}{Weighted\ Avg.\ Shares}$$</div>
+      <p class="desc">Net profit allocated to each share of common stock.</p>
+      <div class="form-group"><label>Net Income ($)</label><input type="number" id="eps-income" placeholder="e.g. 960000" inputmode="decimal"></div>
+      <div class="form-group"><label>Preferred Dividends ($)</label><input type="number" id="eps-pref" placeholder="e.g. 0" inputmode="decimal"></div>
+      <div class="form-group"><label>Common Shares Outstanding</label><input type="number" id="eps-shares" placeholder="e.g. 400000" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('eps')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('eps')">Sample</button>
+      </div>
+      <div class="result" id="eps-result"></div>
+    </div>
+    <div class="card" data-ratio="price earnings pe ratio valuation profitability">
+      <div class="card-header"><h3 class="card-title">Price-to-Earnings (P/E)</h3><span class="badge" data-badge="Profitability">Profitability</span></div>
+      <div class="formula">$$P/E = \dfrac{Market\ Share\ Price}{EPS}$$</div>
+      <p class="desc">Valuation multiple of share price relative to annual EPS.</p>
+      <div class="form-group"><label>Market Share Price ($)</label><input type="number" id="pe-price" placeholder="e.g. 48.00" inputmode="decimal"></div>
+      <div class="form-group"><label>Earnings Per Share ($)</label><input type="number" id="pe-eps" placeholder="e.g. 2.40" inputmode="decimal"></div>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="calc('pe')">Calculate</button>
+        <button class="btn btn-secondary" onclick="fillDemo('pe')">Sample</button>
+      </div>
+      <div class="result" id="pe-result"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CASH FLOW -->
+<section id="cashflow" class="section" data-category="cashflow">
+  <div class="section-header"><div class="section-badge cashflow-badge">&#128181; Cash Flow</div><h2 class="section-title">Cash Flow Dynamics &amp; NOPAT</h2><p class="section-desc">Analyze operating cash generation and free cash flow.</p></div>
+  <div class="card-grid">
+    <div class="card" data-ratio="nopat operating profit after tax cashflow"><div class="card-header"><h3 class="card-title">NOPAT</h3><span class="badge">Cash Flow</span></div><div class="formula">$$NOPAT = EBIT \times (1 - Tax\ Rate)$$</div><p class="desc">Net Operating Profit After Tax.</p><div class="form-group"><label>EBIT ($)</label><input type="number" id="nopat-ebit"></div><div class="form-group"><label>Tax Rate (%)</label><input type="number" id="nopat-tax"></div><div class="card-actions"><button class="btn btn-primary" onclick="calc('nopat')">Calculate</button><button class="btn btn-secondary" onclick="fillDemo('nopat')">Sample</button></div><div class="result" id="nopat-result"></div></div>
+    <div class="card" data-ratio="operating cash flow ocf cashflow"><div class="card-header"><h3 class="card-title">Operating Cash Flow Ratio</h3><span class="badge">Cash Flow</span></div><div class="formula">$$OCF\ Ratio = \dfrac{Cash\ Flow}{Current\ Liabilities}$$</div><p class="desc">Ability to service short-term debt from operations.</p><div class="form-group"><label>Operating Cash Flow ($)</label><input type="number" id="ocf-flow"></div><div class="form-group"><label>Current Liabilities ($)</label><input type="number" id="ocf-liab"></div><div class="card-actions"><button class="btn btn-primary" onclick="calc('ocf')">Calculate</button><button class="btn btn-secondary" onclick="fillDemo('ocf')">Sample</button></div><div class="result" id="ocf-result"></div></div>
+    <div class="card" data-ratio="free cash flow fcf capex cashflow"><div class="card-header"><h3 class="card-title">Free Cash Flow (FCF)</h3><span class="badge">Cash Flow</span></div><div class="formula">$$FCF = OCF - Capital\ Expenditures$$</div><p class="desc">Cash available for distribution or debt repayment.</p><div class="form-group"><label>Operating Cash Flow ($)</label><input type="number" id="fcf-ocf"></div><div class="form-group"><label>Capital Expenditures ($)</label><input type="number" id="fcf-capex"></div><div class="card-actions"><button class="btn btn-primary" onclick="calc('fcf')">Calculate</button><button class="btn btn-secondary" onclick="fillDemo('fcf')">Sample</button></div><div class="result" id="fcf-result"></div></div>
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section id="budget" class="section" data-category="budget">
+  <div class="section-header"><div class="section-badge budget-badge">&#127919; Budget</div><h2 class="section-title">Compound Growth &amp; Financial Projections</h2><p class="section-desc">Forecast future value and investment maturation over time.</p></div>
+  <div class="card-grid"><div class="card" data-ratio="compound growth cagr future value budget"><div class="card-header"><h3 class="card-title">Future Value (Compound Growth)</h3><span class="badge">Budget</span></div><div class="formula">$$FV = PV \times (1 + r)^n$$</div><p class="desc">Project future value at annual rate $r$ over $n$ years.</p><div class="form-group"><label>Present Value / Principal ($)</label><input type="number" id="cb-pv"></div><div class="form-group"><label>Annual Growth Rate (%)</label><input type="number" id="cb-rate"></div><div class="form-group"><label>Number of Years</label><input type="number" id="cb-years"></div><div class="card-actions"><button class="btn btn-primary" onclick="calc('cb')">Calculate</button><button class="btn btn-secondary" onclick="fillDemo('cb')">Sample</button></div><div class="result" id="cb-result"></div></div></div>
+</section>
+</main>
+<footer class="footer"><div class="footer-content"><div class="footer-brand"><span class="logo-icon">&#9889;</span><span>Quantum Financial Hub</span></div><p class="footer-desc">Mathematical precision and LaTeX typesetting for elite financial analysis.</p><div class="footer-meta">&copy; 2026 Quantum Finance &bull; Enterprise Edition</div></div></footer>
+</div>
+<div class="modal-backdrop" id="modalBackdrop"><div class="command-modal"><div class="modal-search-header"><input type="text" id="modalSearchInput" placeholder="Search any ratio or metric..." autocomplete="off"><kbd class="esc-kbd">ESC</kbd></div><div class="modal-results" id="modalResults"><div class="modal-hint">Start typing to find a calculator...</div></div></div></div>
 <script src="script.js"></script>
 </body>
 </html>
+
